@@ -1,0 +1,54 @@
+services:
+  - type: web
+    name: fixed-trading-bot-v2
+    env: python
+    plan: free
+    region: frankfurt  # EU region (Türkiye'ye yakın)
+    runtime: python
+    buildCommand: |
+      pip install --upgrade pip setuptools wheel
+      pip install -r requirements.txt
+    startCommand: python akilli_tarayici_bot.py
+    
+    # Environment Variables
+    envVars:
+      - key: TELEGRAM_TOKEN
+        value: 8235512158:AAFV9V9PNAzUIA8VcT7Vwf0Znbi_8z0nw-w
+      
+      - key: TELEGRAM_CHAT_ID
+        value: -1002814211183
+      
+      - key: PORT
+        value: 10000
+      
+      - key: LOG_LEVEL
+        value: INFO
+      
+      # Trading Strategy Settings
+      - key: MIN_VOLUME_24H
+        value: 100000
+      
+      - key: MAX_SYMBOLS
+        value: 100
+      
+      - key: MIN_SIGNAL_SCORE
+        value: 4.0
+      
+      - key: SIGNAL_COOLDOWN_H
+        value: 24
+      
+      # Risk Management
+      - key: MIN_VOLUME_RATIO
+        value: 1.3
+      
+    # Health check configuration
+    healthCheckPath: /health
+    
+    # Auto-deploy settings
+    autoDeploy: true
+    
+    # Resource limits (free tier)
+    disk:
+      name: data
+      mountPath: /data
+      sizeGB: 1
